@@ -7,6 +7,16 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 
 import { Link, useParams } from "react-router-dom";
+import { Button } from "@material-ui/core";
+
+
+async function fetchUser(id, cb) {
+    const response = await fetch(
+        `https://randomuser.me/api/?id=${encodeURIComponent(id)}`
+    );
+    const json = await response.json();
+    cb(json);
+}
 
 export default function UserDetails() {
     let { id } = useParams();
@@ -14,19 +24,22 @@ export default function UserDetails() {
     const [user, setUser] = useState("");
 
     useEffect(() => {
-        async function fetchUser() {
-            const response = await fetch(
-                `https://randomuser.me/api/?id=${encodeURIComponent(id)}`
-            );
-            const json = await response.json();
+        fetchUser(id, (json) => {
             setUser(json.results[0]);
-            setIsLoading(false)
-        }
-        fetchUser();
+            setIsLoading(false);
+        });
     }, [id]);
-    
+
+    const onRefresh = () => {
+        fetchUser(id, (json) => {
+            setUser(json.results[0]);
+            setIsLoading(false);
+        });
+    };
+
     return !isLoading ? (
         <Card sx={{ maxWidth: 1000 }}>
+            <Button variant="outlined" style={{float: 'right'}} onClick={onRefresh}>Refresh</Button>
             <CardMedia component="img" alt={user.name.title} style={{width:"300px"}} image={user.picture.large} />
             <CardContent>
                 <Typography variant="body2" color="text.secondary">
