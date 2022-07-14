@@ -1,0 +1,51 @@
+import React, { useEffect, useState } from "react";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+
+import { useParams } from "react-router-dom";
+
+export default function UserDetails() {
+    let { id } = useParams();
+    const [isLoading,setLoading] = useState(true);
+    const [user,setUser]=useState("");
+
+
+    useEffect(()=>{
+        async function fetchUser(){
+            const response = await fetch(`https://randomuser.me/api/?id=${id}`);
+            const json = await response.json();
+            setUser(json.results.user);
+            console.log(user);
+        }  
+        fetchUser();
+    },[id])
+
+    console.log({id})
+    return (
+        <Card sx={{ maxWidth: 1000}}>
+            <CardMedia
+                component="img"
+                alt="green iguana"
+                height="140"
+                image="/static/images/cards/contemplative-reptile.jpg"
+            />
+            <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                    Lizard
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                    Lizards are a widespread group of squamate reptiles, with
+                    over 6,000 species, ranging across all continents except
+                    Antarctica
+                </Typography>
+            </CardContent>
+            <CardActions>
+                <Button size="small">Go to Main Page</Button>  
+            </CardActions>
+        </Card>
+    );
+}
