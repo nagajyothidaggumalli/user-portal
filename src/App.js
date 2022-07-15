@@ -5,8 +5,6 @@ import UserDetails from "./components/UserDetails";
 import AddUser from "./components/AddUser";
 import { useEffect } from 'react';
 
-//const studentData=[];
-
 function App() {
     const location = useLocation();
 
@@ -18,7 +16,6 @@ function App() {
         <div className="container">
       
           <Routes> 
-              {/* <Route path='/' element={<Redirect to="/students"/>}></Route> */}
               <Route path='/' element={<UsersList />}></Route>
               <Route path='/users' element={<UsersList />}></Route>
               <Route exact path='/user/:id'  element={<UserDetails />}></Route>
